@@ -1,0 +1,38 @@
+# Docker Compose V2
+# docker compose -f docker-compose.yml -p dev build
+# Redis db using Docker - https://in4.io/ready-in-a-jiffy-redis
+
+version: "3.9"
+
+services:
+  # Redis
+  redis:
+    image: custom-redis:0.9
+    container_name: redis
+    hostname: redis
+    build:
+      context: ./
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata01:/data
+    networks:
+      - backend
+
+  # RedisInsight
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: redisinsight
+    hostname: redisinsight
+    ports:
+      - "8001:8001"
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true
+
+volumes:
+  redisdata01:
+    driver: local
